@@ -4,10 +4,11 @@
 */
 
 
-//axios.get("https://api.github.com/users/erictaylor103")
-//.then(res =>{
-//  console.log(res.data);
-//})
+axios.get("https://api.github.com/users/erictaylor103").then(res =>{
+  //console.log(res.data);
+  const newCard = createCards(res.data);
+  document.querySelector(".cards").appendChild(newCard);
+})
 
 
 
@@ -32,7 +33,30 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+//const followersArray = [];
+axios.get("https://api.github.com/users/erictaylor103/followers")
+.then(res =>{
+  //console.log(res);
+  res.data.forEach(person =>{
+  console.log(person);
+
+  //console.log(Eric);
+
+const followerUrl = person.url;
+axios.get(followerUrl)
+  .then(res =>{
+    //console.log(res);
+    const ericFollowersCard = createCards(res.data);
+    //console.log(ericFollowersCard);
+    document.querySelector(".cards").appendChild(ericFollowersCard);
+  })
+})
+})
+
+
+
+
+
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -54,7 +78,7 @@ const followersArray = [];
 
 */
 
-function createCard(object){
+function createCards(object){
   //CREATING THE ELEMENTS FOR THE HTML PAGE
   const container = document.createElement("div");
   const image     = document.createElement("img");
@@ -91,8 +115,8 @@ function createCard(object){
   name.textContent      = "Name: " + object.name;
   username.textContent  = "Username: " + object.login;
   location.textContent  = "Location: " + object.location;
-  profile.href          = "Profile: " + object.url;
-  profile.textContent   = object.url;
+  profile.href          = "Profile: " + object.html_url;
+  profile.textContent   = object.html_url;
   followers.textContent = "Followers: " + object.followers;
   following.textContent = "Following: " + object.following;
   bio.textContent       = "Bio: " + object.bio;
@@ -101,7 +125,7 @@ function createCard(object){
 
 
 }
-//createCard(); //I USED THIS TO BE ABLE TO CONSOLE LOG ITEMS
+
 
 
 
